@@ -11,6 +11,32 @@ function generateNumericHash(email) {
   }
 }
 
+const isDeepEqual = (object1, object2) => {
+
+  const objKeys1 = Object.keys(object1);
+  const objKeys2 = Object.keys(object2);
+
+  if (objKeys1.length !== objKeys2.length) return false;
+
+  for (var key of objKeys1) {
+    const value1 = object1[key];
+    const value2 = object2[key];
+
+    const isObjects = isObject(value1) && isObject(value2);
+
+    if ((isObjects && !isDeepEqual(value1, value2)) ||
+      (!isObjects && value1 !== value2)
+    ) {
+      return false;
+    }
+  }
+  return true;
+};
+
+const isObject = (object) => {
+  return object != null && typeof object === "object";
+};
+
 const ImageMatchingGame = () => {
 
   const fragment = window.location.hash.substring(1);
@@ -29,8 +55,6 @@ const ImageMatchingGame = () => {
     { id: 5, source: '/images/m5.png', target: '/images/5.png' },
     { id: 6, source: '/images/m6.png', target: '/images/6.png' },
   ];
-
-  
 
   // Handle both mouse and touch events
   const handleDragStart = (e, id) => {
@@ -90,11 +114,14 @@ const ImageMatchingGame = () => {
 
     if (Object.keys(matches).length + 1 === imagePairs.length) {
       setShowSuccess(true);
-      console.log('Submitting matches:', { ...matches, [sourceId]: targetId });
-      console.log(generateNumericHash(decodeURIComponent(fragment)))
+      const original = {1: 3, 2: 4, 3: 1, 4: 6, 5: 2, 6: 5};
+      const bet = { ...matches, [sourceId]: targetId }
+      console.log('Acertou', isDeepEqual(original, bet))
+
+
       supabase
         .from('recordati')
-        .insert({ id: generateNumericHash(decodeURIComponent(fragment)), results: { ...matches, [sourceId]: targetId }, email: decodeURIComponent(fragment) }).then(el => {
+        .insert({ id: generateNumericHash(decodeURIComponent(fragment)), results: { ...matches, [sourceId]: targetId }, email: decodeURIComponent(fragment), certo: isDeepEqual(original, bet) }).then(el => {
           console.log(el)
         })
 
@@ -122,9 +149,8 @@ const ImageMatchingGame = () => {
     <div className="min-h-screen bg-gray-50">
       {/* Top decorative image - smaller on mobile */}
  
-
       {/* Main game container - better padding on mobile */}
-      <div className="max-w-4xl mx-auto -mt-16 sm:-mt-24 px-4 pb-8 sm:pb-12">
+      <div className="max-w-4xl mx-auto px-4 pb-8 sm:pb-12">
         <div className="bg-white ">
           <h1 className="text-2xl sm:text-3xl font-bold text-center mb-6 sm:mb-12 text-gray-800">
            
