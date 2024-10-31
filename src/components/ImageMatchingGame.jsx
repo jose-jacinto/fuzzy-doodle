@@ -1,7 +1,22 @@
 import React, { useState, useCallback } from 'react';
 import { Check } from 'lucide-react';
+import { createClient } from '@supabase/supabase-js'
+
+function generateNumericHash(email) {
+  const normalizedEmail = email.trim().toLowerCase();
+  let hash = 0;
+  for (let i = 0; i < normalizedEmail.length; i++) {
+      const char = normalizedEmail.charCodeAt(i);
+      hash = (hash * 31 + char) % 1000000007; // Using a large prime number for distribution
+  }
+}
 
 const ImageMatchingGame = () => {
+
+  const fragment = window.location.hash.substring(1);
+  // Create a single supabase client for interacting with your database
+  const supabase = createClient('https://fgdcwqmfstbspzwotoxd.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZnZGN3cW1mc3Ric3B6d290b3hkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzAzNzg2NzgsImV4cCI6MjA0NTk1NDY3OH0.-kC2o9L3WYLJrcD_q-7ECgxsV4Q_AYNz51jdkYG66eo')
+
   const [matches, setMatches] = useState({});
   const [showSuccess, setShowSuccess] = useState(false);
   const [draggedId, setDraggedId] = useState(null);
@@ -14,6 +29,8 @@ const ImageMatchingGame = () => {
     { id: 5, source: '/images/m5.png', target: '/images/5.png' },
     { id: 6, source: '/images/m6.png', target: '/images/6.png' },
   ];
+
+  
 
   // Handle both mouse and touch events
   const handleDragStart = (e, id) => {
@@ -74,6 +91,13 @@ const ImageMatchingGame = () => {
     if (Object.keys(matches).length + 1 === imagePairs.length) {
       setShowSuccess(true);
       console.log('Submitting matches:', { ...matches, [sourceId]: targetId });
+      console.log(generateNumericHash(decodeURIComponent(fragment)))
+      supabase
+        .from('recordati')
+        .insert({ id: generateNumericHash(decodeURIComponent(fragment)), results: { ...matches, [sourceId]: targetId }, email: decodeURIComponent(fragment) }).then(el => {
+          console.log(el)
+        })
+
     }
   }, [matches, imagePairs.length, draggedId]);
 
@@ -100,7 +124,7 @@ const ImageMatchingGame = () => {
  
 
       {/* Main game container - better padding on mobile */}
-      <div className="max-w-6xl mx-auto -mt-16 sm:-mt-24 px-4 pb-8 sm:pb-12">
+      <div className="max-w-4xl mx-auto -mt-16 sm:-mt-24 px-4 pb-8 sm:pb-12">
         <div className="bg-white ">
           <h1 className="text-2xl sm:text-3xl font-bold text-center mb-6 sm:mb-12 text-gray-800">
            
@@ -131,7 +155,7 @@ const ImageMatchingGame = () => {
                   onTouchMove={handleTouchMove}
                   onTouchEnd={(e) => handleTouchEnd(e, pair.id)}
                 >
-                  <div className="p-2 sm:p-3 cursor-move hover:border-blue-400 active:border-blue-600 transition-colors" style={{ margin: 'auto', width: 300}}>
+                  <div className="p-2 sm:p-3 cursor-move hover:border-blue-400 active:border-blue-600 transition-colors" style={{ margin: 'auto', width: 200}}>
                     <img
                       src={pair.source}
                       alt={`Source ${pair.id}`}
@@ -160,7 +184,7 @@ const ImageMatchingGame = () => {
                   onDragOver={handleDragOver}
                   onDragLeave={handleDragLeave}
                   onDrop={(e) => handleDrop(e, pair.id)}
-                  style={{ margin: 'auto', width: 300, marginTop: 15 }}
+                  style={{ margin: 'auto', width: 200, marginTop: 15 }}
                 >
                   <img
                     src={pair.target}
@@ -174,11 +198,12 @@ const ImageMatchingGame = () => {
           </div>
 
           {/* Success message */}
-          {showSuccess && (
+          {/* {showSuccess && (
 
               <p> Perfect match! All images have been correctly paired.</p>
              
-          )}
+          )} */}
+          {/* <h1 className="text-slate-900 text-lg text-center mt-10"> Perfect match! All images have been correctly paired.</h1> */}
         </div>
         <img
             src="/images/recordati_lp2.jpg"
