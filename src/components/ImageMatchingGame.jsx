@@ -246,10 +246,10 @@ const ImageMatchingGame = () => {
           </div>
           
           {/* Instructions based on device */}
-          <p className="text-center text-gray-600 mb-6">
+          <p className="text-center text-gray-500 mb-6">
             {isMobile ? 
-              "Clique nas imagens dos medicamentos para combiná-las com as doenças abaixo" :
-              "Arraste as imagens de cada medicamento da esquerda para combiná-las com a doença correspondente na direita"
+              "Clique nas imagens dos medicamentos e faça scroll down, para combiná-las com as doenças abaixo" :
+              "Coloque o mouse em cima de cada medicamento, e arraste-o para a doença correspondente"
             }
           </p>
 
@@ -316,8 +316,6 @@ const ImageMatchingGame = () => {
               ))}
             </div>
           </div>
-
-          
         </div>
       </div>
 
