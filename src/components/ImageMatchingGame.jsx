@@ -256,14 +256,14 @@ const ImageMatchingGame = () => {
           {/* Grid layout */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
             {/* Source images */}
-            <div className="space-y-4 sm:space-y-6">
+            <div className={`space-y-4 sm:space-y-6 ${isMobile && 'px-20'}`}>
               {/* <h2 className="text-lg sm:text-xl font-semibold text-gray-700 mb-4">
                 {isMobile ? 'Touch these images' : 'Drag these images'}
               </h2> */}
               {imagePairs.map(pair => (
                 <div
                   key={`source-${pair.id}`}
-                  className={`transform transition-all duration-200
+                  className={`transform transition-all duration-200 
                     ${isMobile ? 'active:scale-95' : 'hover:scale-105'}
                     ${touchedId === pair.id ? 'border-blue-500 bg-blue-50' : ''}
                     ${Object.keys(matches).includes(String(pair.id)) ? 'opacity-50' : ''}`}
@@ -287,14 +287,14 @@ const ImageMatchingGame = () => {
             </div>
 
             {/* Target images */}
-            <div className="space-y-4 sm:space-y-6">
+            <div className={`space-y-4 sm:space-y-6 ${isMobile && 'px-20'}`}>
               {/* <h2 className="text-lg sm:text-xl font-semibold text-gray-700 mb-4">
                 {isMobile ? 'Then touch to match' : 'Drop to match'}
               </h2> */}
               {imagePairs.map(pair => (
                 <div
                   key={`target-${pair.id}`}
-                  className={`border-2 rounded-xl p-2 sm:p-3 transition-all duration-200
+                  className={`border-2 rounded-xl p-2 sm:p-3 transition-all duration-200 
                     ${Object.values(matches).includes(pair.id) 
                       ? 'border-green-500 bg-green-50' 
                       : 'border-gray-300 hover:border-blue-300'}
