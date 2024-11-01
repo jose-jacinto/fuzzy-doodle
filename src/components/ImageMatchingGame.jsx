@@ -317,16 +317,18 @@ const ImageMatchingGame = () => {
             </div>
           </div>
         </div>
-      </div>
-
-      {/* Bottom decorative image */}
-      <div className="w-full h-32 sm:h-48 bg-gradient-to-r from-purple-500 to-blue-500">
         <img
             src="/images/recordati_lp2.jpg"
             alt="Top decoration"
             className="w-full h-full object-cover"
           />
       </div>
+
+      {/* Bottom decorative image */}
+    
+        
+        
+   
     </div>
   );
 
