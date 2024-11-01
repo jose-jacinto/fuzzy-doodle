@@ -279,7 +279,7 @@ const ImageMatchingGame = () => {
                       alt={`Source ${pair.id}`}
                       className=""
                       draggable="false"
-                      style={{ margin: 'auto', height: 200 }}
+                      style={{ margin: 'auto', 'max-height': 200, height: isMobile ? 'auto' : 200  }}
                     />
                   </div>
                 </div>
@@ -308,9 +308,10 @@ const ImageMatchingGame = () => {
                     src={pair.target}
                     alt={`Target ${pair.id}`}
                     className=""
-                    height={300}
+                 
+               
                     draggable="false"
-                    style={{ margin: 'auto', height: 200 }}
+                    style={{ margin: 'auto', 'max-height': 200, height: isMobile ? 'auto' : 200  }}
                   />
                 </div>
               ))}
